@@ -1,5 +1,5 @@
 #!/bin/bash
 
-export GOPATH=`pwd`
-mkdir bin
+mkdir -p bin
 go get -v -u github.com/spf13/cobra
+go get -v -u github.com/spf13/cobra/cobra
