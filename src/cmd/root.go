@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"os"
 	"fmt"
+	"bufio"
 
 	"github.com/spf13/cobra"
 )
@@ -19,15 +21,21 @@ func init() {
 	cobra.OnInitialize()
 	RootCmd.AddCommand(versionCmd)
 
-	show(RootCmd.Commands())
+	showMenu(RootCmd.Commands())
 }
 
-func show(cmds []*cobra.Command) {
+func showMenu(cmds []*cobra.Command) {
 	fmt.Println("----------")
 	for i, c := range cmds {
 		fmt.Printf("[%d] %s --- %s\n", i, c.Use, c.Short)
 	}
 	fmt.Println("----------")
+	fmt.Printf(">>> Please select number [0] - [%d] or [99]", len(cmds))
+	fmt.Println(">>>") 
+	var sc = bufio.NewScanner(os.Stdin)
+	sc.Scan()
+	input := sc.Text()
+	fmt.Println(input) 
 }
 
 var versionCmd = &cobra.Command{
