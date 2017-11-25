@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"os"
-	"fmt"
 	"bufio"
+	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -30,12 +31,35 @@ func showMenu(cmds []*cobra.Command) {
 		fmt.Printf("[%d] %s --- %s\n", i, c.Use, c.Short)
 	}
 	fmt.Println("----------")
-	fmt.Printf(">>> Please select number [0] - [%d] or [99]", len(cmds))
-	fmt.Println(">>>") 
+	fmt.Printf(">>> Please select number [0] - [%d] or [99]\n", len(cmds))
+	fmt.Println(">>>")
 	var sc = bufio.NewScanner(os.Stdin)
 	sc.Scan()
 	input := sc.Text()
-	fmt.Println(input) 
+	switch input {
+	case "0":
+		sc = bufio.NewScanner(os.Stdin)
+		fmt.Print(">>> x = ")
+		sc.Scan()
+		x := sc.Text()
+		sc = bufio.NewScanner(os.Stdin)
+		fmt.Print(">>> y = ")
+		sc.Scan()
+		y := sc.Text()
+		cmd := exec.Command("go-keisan.exe", "add", x, y)
+		cmd.Wait()
+		sum, err := cmd.Output()
+		if err != nil {
+			fmt.Println("Error!!")
+		}
+		fmt.Printf(">>> %s + %s = %s\n", x, y, sum)
+	case "1":
+		fmt.Println("selected 1 !")
+	case "99":
+		fmt.Println("selected 99 !")
+	default:
+		fmt.Println(">>> Bud Number.")
+	}
 }
 
 var versionCmd = &cobra.Command{
